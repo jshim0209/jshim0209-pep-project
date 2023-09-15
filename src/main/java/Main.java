@@ -6,6 +6,7 @@ import io.javalin.Javalin;
  * affect your program in any way and you may write whatever code you like here.
  */
 public class Main {
+
     public static void main(String[] args) {
         SocialMediaController controller = new SocialMediaController();
         Javalin app = controller.startAPI();

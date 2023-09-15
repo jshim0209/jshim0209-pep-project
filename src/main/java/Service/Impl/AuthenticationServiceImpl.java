@@ -1,9 +1,12 @@
 package Service.Impl;
 
+import java.sql.SQLException;
+
 import DAO.AccountRepository;
-import DTO.LoginDTO;
+import DTO.AccountDTO;
 import Model.Account;
 import Service.AuthenticationService;
+import io.javalin.http.UnauthorizedResponse;
 
 public class AuthenticationServiceImpl implements AuthenticationService {
 
@@ -18,9 +21,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public Account loginAccount(LoginDTO LoginDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'loginAccount'");
+    public Account loginAccount(String username, String password) throws SQLException {
+        Account loggedInAccount = accountRepository.getUserByUsernameAndPassword(username, password);
+        if (loggedInAccount == null) {
+            throw new UnauthorizedResponse("Invalid username/password provided!");
+        }
+        return loggedInAccount;
     }
     
 }

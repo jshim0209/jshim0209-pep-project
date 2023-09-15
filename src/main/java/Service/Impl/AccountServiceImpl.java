@@ -3,7 +3,6 @@ package Service.Impl;
 import java.sql.SQLException;
 
 import DAO.AccountRepository;
-import DTO.RegistrationDTO;
 import Exception.AccountAlreadyExistException;
 import Model.Account;
 import Service.AccountService;
@@ -33,18 +32,22 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    public void validateAccountExists(String username) throws SQLException, AccountAlreadyExistException {
-		if (accountRepository.getAccountByUsername(username) != null) {
-			throw new AccountAlreadyExistException(username);
-		}
-	}
+    // public void validateAccountExists(String username) throws SQLException, AccountAlreadyExistException {
+	// 	if (accountRepository.getAccountByUsername(username) != null) {
+	// 		throw new AccountAlreadyExistException(username);
+	// 	}
+	// }
 
     @Override
     public Account createNewAccount(Account accountToAdd) throws SQLException, AccountAlreadyExistException {
         validateUsername(accountToAdd.getUsername());
         validatePassword(accountToAdd.getPassword());
+        Account newAccount = accountRepository.createNewAccount(accountToAdd);
+        if (newAccount == null) {
+            throw new AccountAlreadyExistException("Username taken!");
+        }
         // validateAccountExists(registrationDTO.getUsername());
-        return accountRepository.createNewAccount(accountToAdd);
+        return newAccount;
               
         
     }

@@ -1,8 +1,10 @@
 package Service;
 
-import DTO.LoginDTO;
+import java.sql.SQLException;
+
+import DTO.AccountDTO;
 import Model.Account;
 
 public interface AuthenticationService {
-    public Account loginAccount(LoginDTO LoginDTO);
+    public abstract Account loginAccount(String username, String password) throws SQLException;
 }

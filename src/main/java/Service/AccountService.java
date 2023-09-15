@@ -7,7 +7,7 @@ import Model.Account;
 
 public interface AccountService {
 
-    public Account createNewAccount(Account accountToAdd) throws SQLException, AccountAlreadyExistException;
-    public Account getAccountByUsername(String username) throws SQLException; 
+    public abstract Account createNewAccount(Account accountToAdd) throws SQLException, AccountAlreadyExistException;
+    public abstract Account getAccountByUsername(String username) throws SQLException; 
     
 }

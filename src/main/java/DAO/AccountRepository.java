@@ -6,7 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import DTO.RegistrationDTO;
+import DTO.AccountDTO;
+import DTO.LoginDTO;
 import Model.Account;
 import Util.ConnectionUtil;
 
@@ -22,12 +23,15 @@ public class AccountRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
+                int acount_id = resultSet.getInt("account_id");
                 String usernameFound = resultSet.getString("username");
                 String passwordFound = resultSet.getString("password");
 
-                return new Account(usernameFound, passwordFound);
+                return new Account(acount_id, usernameFound, passwordFound);
+            } else {
+                return null;
             }
-            return null;
+            
         }
     }
 
@@ -52,6 +56,24 @@ public class AccountRepository {
 
             return new Account(generatedId, accountToAdd.getUsername(), accountToAdd.getPassword());
         }
+    }
+
+    public Account getUserByUsernameAndPassword(String username, String password) throws SQLException {
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            String sql = "SELECT * FROM account as a WHERE a.username = ? AND a.password = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, username);
+                preparedStatement.setString(2, password);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    String accountUsername = resultSet.getString("username");
+                    String accountPassword = resultSet.getString("password");
+                    return new Account(username, password);
+                }          
+            }
+            return null;            
+        }
+        
     }
     
 }
