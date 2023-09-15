@@ -6,37 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import DTO.AccountDTO;
-import DTO.LoginDTO;
 import Model.Account;
 import Util.ConnectionUtil;
 
 public class AccountRepository {
 
-    public Account getAccountByUsername(String username) throws SQLException {
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            String sql = "SELECT * FROM account WHERE username = ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1, username);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                int acount_id = resultSet.getInt("account_id");
-                String usernameFound = resultSet.getString("username");
-                String passwordFound = resultSet.getString("password");
-
-                return new Account(acount_id, usernameFound, passwordFound);
-            } else {
-                return null;
-            }
-            
-        }
-    }
-
     public Account createNewAccount(Account accountToAdd) throws SQLException {
-        try (Connection connection = ConnectionUtil.getConnection()) {
+        Connection connection = ConnectionUtil.getConnection();
+        try {
             String sql = "INSERT INTO account (username, password) VALUES (?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
@@ -55,25 +32,30 @@ public class AccountRepository {
             int generatedId = resultSet.getInt(1);
 
             return new Account(generatedId, accountToAdd.getUsername(), accountToAdd.getPassword());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
+        return null;
     }
 
     public Account getUserByUsernameAndPassword(String username, String password) throws SQLException {
-        try (Connection connection = ConnectionUtil.getConnection()) {
+        Connection connection = ConnectionUtil.getConnection();
+        try {
             String sql = "SELECT * FROM account as a WHERE a.username = ? AND a.password = ?";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setString(1, username);
-                preparedStatement.setString(2, password);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    String accountUsername = resultSet.getString("username");
-                    String accountPassword = resultSet.getString("password");
-                    return new Account(username, password);
-                }          
-            }
-            return null;            
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int accountId = resultSet.getInt("account_id");
+                String accountUsername = resultSet.getString("username");
+                String accountPassword = resultSet.getString("password");
+                return new Account(accountId, accountUsername, accountPassword);
+            }           
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        
+        return null;        
     }
     
 }

@@ -32,12 +32,6 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    // public void validateAccountExists(String username) throws SQLException, AccountAlreadyExistException {
-	// 	if (accountRepository.getAccountByUsername(username) != null) {
-	// 		throw new AccountAlreadyExistException(username);
-	// 	}
-	// }
-
     @Override
     public Account createNewAccount(Account accountToAdd) throws SQLException, AccountAlreadyExistException {
         validateUsername(accountToAdd.getUsername());
@@ -46,15 +40,7 @@ public class AccountServiceImpl implements AccountService {
         if (newAccount == null) {
             throw new AccountAlreadyExistException("Username taken!");
         }
-        // validateAccountExists(registrationDTO.getUsername());
         return newAccount;
-              
-        
-    }
-
-    @Override
-    public Account getAccountByUsername(String username) throws SQLException {
-        return accountRepository.getAccountByUsername(username);
     }
     
 }

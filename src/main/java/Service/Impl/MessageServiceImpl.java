@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import DAO.MessageRepository;
+import Exception.InvalidInputException;
 import Model.Message;
 import Service.MessageService;
 
@@ -25,9 +26,7 @@ public class MessageServiceImpl implements MessageService {
     }
     @Override
     public Message getMessageById(int messageId) throws SQLException {
-        Message message = this.messageRepository.getMessageById(messageId);
-        System.out.println(message);
-        return message;
+        return messageRepository.getMessageById(messageId);
     }
     @Override
     public List<Message> getMessagesByAccountId(int accountId) throws SQLException {
@@ -40,6 +39,17 @@ public class MessageServiceImpl implements MessageService {
             return messageTobeDeleted;
         }
         return null;
+    }
+
+    @Override
+    public Message createMessage(Message messageToAdd) throws SQLException, InvalidInputException {
+        // validateUsername(messageToAdd.getUsername());
+        // validatePassword(messageToAdd.getPassword());
+        Message newMessage = messageRepository.createNewMessage(messageToAdd);
+        if (newMessage == null) {
+            throw new InvalidInputException("Invalid Input!");
+        }
+        return newMessage;
     }
     
 }

@@ -3,7 +3,6 @@ package Service.Impl;
 import java.sql.SQLException;
 
 import DAO.AccountRepository;
-import DTO.AccountDTO;
 import Model.Account;
 import Service.AuthenticationService;
 import io.javalin.http.UnauthorizedResponse;
