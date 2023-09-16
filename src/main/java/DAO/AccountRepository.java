@@ -57,5 +57,24 @@ public class AccountRepository {
         }
         return null;        
     }
+
+    public Account getUserById(int account_id) throws SQLException {
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "SELECT * FROM account WHERE account_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, account_id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int accountId = resultSet.getInt("account_id");
+                String accountUsername = resultSet.getString("username");
+                String accountPassword = resultSet.getString("password");
+                return new Account(accountId, accountUsername, accountPassword);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
     
 }

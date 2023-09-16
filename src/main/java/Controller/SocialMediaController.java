@@ -63,6 +63,7 @@ public class SocialMediaController {
         app.get("/accounts/{account_id}/messages", getMessagesByAccountId);
         app.delete("/messages/{message_id}", deleteMessage);
         app.post("/messages", createMessage);
+        app.patch("messages/{message_id}", updaetMessage);
 
         app.exception(IllegalArgumentException.class, badArgument);
         app.exception(AccountAlreadyExistException.class, usernameTaken);
@@ -122,6 +123,14 @@ public class SocialMediaController {
         } else {
             ctx.json("");
         }        
+    };
+
+    private final Handler updaetMessage = (ctx) -> {
+        Message messageToUpdate = ctx.bodyAsClass(Message.class);
+        String message_id = ctx.pathParam("message_id");
+        int messageId = Integer.parseInt(message_id);
+        Message updatedMessage = messageService.updateMessage(messageId, messageToUpdate.message_text);
+        ctx.json(updatedMessage);
     };
 
     private final ExceptionHandler<IllegalArgumentException> badArgument = (exception, ctx) -> {

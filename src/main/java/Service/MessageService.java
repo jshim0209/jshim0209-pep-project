@@ -13,4 +13,5 @@ public interface MessageService {
     public abstract List<Message> getMessagesByAccountId(int accountId) throws SQLException;
     public abstract Message deleteMessage(int messageId) throws SQLException;
     public abstract Message createMessage(Message messageToAdd) throws SQLException, InvalidInputException;
+    public abstract Message updateMessage(int messageId, String message_text) throws SQLException;
 }

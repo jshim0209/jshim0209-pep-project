@@ -117,5 +117,23 @@ public class MessageRepository {
         }
         return null;
     }
+
+    public boolean updateMessage(int messageId, String message_text) {
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, message_text);
+            preparedStatement.setInt(2, messageId);
+            int numberOfMessageDeleted = preparedStatement.executeUpdate();
+
+            if (numberOfMessageDeleted == 1) {
+                return true;
+            } 
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
     
 }
