@@ -17,12 +17,6 @@ import io.javalin.http.ExceptionHandler;
 import io.javalin.http.Handler;
 import io.javalin.http.UnauthorizedResponse;
 
-
-/**
- * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
- * found in readme.md as well as the test cases. You should
- * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
- */
 public class SocialMediaController {
 
     private AccountService accountService;
@@ -54,22 +48,21 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-
+        // Account related endpoints
         app.post("/register", registerAccount);
         app.post("/login", login);
-
+        // Message related endpoints
         app.get("/messages", getAllMessages);
         app.get("/messages/{message_id}", getMessageById);
         app.get("/accounts/{account_id}/messages", getMessagesByAccountId);
         app.delete("/messages/{message_id}", deleteMessage);
         app.post("/messages", createMessage);
         app.patch("messages/{message_id}", updaetMessage);
-
+        // Exceptions endpoints
         app.exception(IllegalArgumentException.class, badArgument);
         app.exception(AccountAlreadyExistException.class, usernameTaken);
         app.exception(UnauthorizedResponse.class, invalidUsernameOrPassword);
         app.exception(InvalidInputException.class, invalidInput);
-
         return app;
     }
 

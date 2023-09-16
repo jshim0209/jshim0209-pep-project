@@ -8,7 +8,6 @@ import DAO.MessageRepository;
 import Exception.InvalidInputException;
 import Model.Message;
 import Service.MessageService;
-import io.javalin.http.UnauthorizedResponse;
 
 public class MessageServiceImpl implements MessageService {
 
